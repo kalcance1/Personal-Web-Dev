@@ -1,0 +1,136 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;  
+    background-color: rgb(110, 108, 108); /* Set background color to black */
+
+}
+/* HEADER START */
+header {
+    background-color: #333;
+    color: #cabcbc;
+    padding: 20px;
+    text-align: center;
+    /* position: fixed; */
+}
+
+nav {
+    background-color: #f4f4f4;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav a {
+    text-decoration: underline;
+    color: #333;
+    padding: 10px 20px;
+}
+
+nav a:hover {
+    background-color: #ddd;
+    color: #333;
+}
+/* HEADER END */
+
+
+
+/* HOME PAGE SECTIONS START */
+.container {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-gap: 20px;
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+.sidebar {
+    background: #f4f4f4;
+    padding: 20px;
+}
+.about-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 20px;
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    background-color: #817c7c;
+}
+
+
+
+
+
+/* HOME PAGE SECTIONS END */
+
+.note-container{
+
+    padding: 10px; 
+    border: black;
+    border-radius: 20px; 
+    
+
+}
+
+.note-container textarea{
+
+    width: 300px;
+    min-height: 100px; /* Set a minimum height to avoid it being too small */
+    resize: none; /* Prevent manual resizing by the user */
+
+}
+
+#entry {
+    width: 100%; /* Adjust the width as needed */
+    max-height: 200px; /* Set a maximum height to prevent excessive expansion */
+    overflow-y: auto; /* Add vertical scrollbar when content exceeds the maximum height */
+    resize: none; /* Allow vertical resizing only */
+}
+
+/* .field {
+    position: relative;
+    width: 250px;
+  }
+  
+  input {
+    font-family: sans-serif;
+    font-size: 16px;
+    height: 30px;
+    width: 100%;
+    border: none;
+    text-align: center;;
+    border-bottom: 1px solid transparent;
+    padding: 0;
+  }
+  
+  input:hover {
+    border-bottom: 1px dashed #ccc;
+    cursor: pointer;
+  }
+  
+  input:focus {
+    border-bottom: 1px solid blue;
+    cursor: text;
+  } */
+
+
+
+
+/* FOOTER START */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+/* FOOTER END */
