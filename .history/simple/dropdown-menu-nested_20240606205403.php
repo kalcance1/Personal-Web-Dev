@@ -39,7 +39,6 @@
 </head>
 <body>
 
-<!-- Dropdown Start -->
 <div class="dropdown">
     <button class="dropbtn" onclick="toggleDropdown('dropdown1')">Dropdown</button>
     <div id="dropdown1" class="dropdown-content">
@@ -48,10 +47,7 @@
         <a href="#">Link 3</a>
     </div>
 </div>
-<!-- Dropdown End -->
 
-
-<!-- Nested Content Start -->
 <div id="nested1" class="nested-content">
     <button onclick="goBack(event)">Back</button>
     <a href="#">Nested Link 1.1</a>
@@ -77,8 +73,6 @@
     <a href="#">Nested Link 2.3.1</a>
     <a href="#">Nested Link 2.3.2</a>
 </div>
-<!-- Nested Content End -->
-
 
 <script>
     var navigationStack = [];
