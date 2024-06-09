@@ -57,7 +57,6 @@
 
 <script>
     var menuItems = [
-        { label: "Exit", action: "exit" },
         { label: "Link 1", submenu: [
             { label: "Nested Link 1.1" },
             { label: "Nested Link 1.2", submenu: [
@@ -74,53 +73,52 @@
         { label: "Link 3" }
     ];
 
-    var backStack = []; // Stack to store the parent items
-
     function toggleDropdown() {
         var dropdown = document.getElementById('dropdown');
         dropdown.classList.toggle('show');
-        if (dropdown.classList.contains('show')) {
-            renderMenuItems(menuItems);
-        } else {
-            dropdown.innerHTML = ''; // Clear the dropdown content
-            backStack = []; // Clear the back stack when closing the dropdown
-        }
+        renderMenuItems(menuItems);
     }
 
     function renderMenuItems(items) {
         var dropdown = document.getElementById('dropdown');
         dropdown.innerHTML = ''; // Clear existing menu items
-        // Render menu items
         items.forEach(function(item) {
             var link = document.createElement('a');
             link.href = '#';
             link.textContent = item.label;
             link.onclick = function(event) {
                 event.preventDefault();
-                if (item.action === "exit") {
-                    toggleDropdown(); // Exit the dropdown menu
-                } else if (item.submenu) {
-                    backStack.push({ items: items, label: item.label }); // Push current items to the back stack
-                    renderMenuItems(item.submenu); // Render submenu items
-                    renderBackButton();
+                // If the menu item has a submenu, render it
+                if (item.submenu) {
+                    renderSubMenu(item.submenu);
                 }
             };
             dropdown.appendChild(link);
         });
     }
 
-    function renderBackButton() {
+    function renderSubMenu(submenu) {
         var dropdown = document.getElementById('dropdown');
-        var backButton = document.createElement('a');
-        backButton.href = '#';
+        dropdown.innerHTML = ''; // Clear existing menu items
+        submenu.forEach(function(item) {
+            var link = document.createElement('a');
+            link.href = '#';
+            link.textContent = item.label;
+            link.onclick = function(event) {
+                event.preventDefault();
+                // If the submenu item has a submenu, render it
+                if (item.submenu) {
+                    renderSubMenu(item.submenu);
+                }
+            };
+            dropdown.appendChild(link);
+        });
+        // Add a back button
+        var backButton = document.createElement('button');
         backButton.textContent = 'Back';
-        backButton.onclick = function(event) {
-            event.preventDefault();
-            var previousItems = backStack.pop();
-            if (previousItems) {
-                renderMenuItems(previousItems.items);
-                renderBackButton();
-            }
+        backButton.onclick = function() {
+            toggleDropdown();
+            renderMenuItems(menuItems);
         };
         dropdown.insertBefore(backButton, dropdown.firstChild);
     }

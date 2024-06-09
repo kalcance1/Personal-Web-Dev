@@ -51,13 +51,16 @@
 <div class="dropdown">
     <button class="hamburger" onclick="toggleDropdown()">☰ Menu</button>
     <div class="dropdown-content" id="dropdown">
+        <button class="back-btn" onclick="goBack(event)">Back</button>
+        <a href="#" onclick="showSubMenu(event, 0)">Link 1</a>
+        <a href="#" onclick="showSubMenu(event, 1)">Link 2</a>
+        <a href="#">Link 3</a>
     </div>
 </div>
 <!-- Dropdown End -->
 
 <script>
     var menuItems = [
-        { label: "Exit", action: "exit" },
         { label: "Link 1", submenu: [
             { label: "Nested Link 1.1" },
             { label: "Nested Link 1.2", submenu: [
@@ -74,55 +77,35 @@
         { label: "Link 3" }
     ];
 
-    var backStack = []; // Stack to store the parent items
-
     function toggleDropdown() {
         var dropdown = document.getElementById('dropdown');
         dropdown.classList.toggle('show');
-        if (dropdown.classList.contains('show')) {
-            renderMenuItems(menuItems);
-        } else {
-            dropdown.innerHTML = ''; // Clear the dropdown content
-            backStack = []; // Clear the back stack when closing the dropdown
-        }
     }
 
-    function renderMenuItems(items) {
+    function showSubMenu(event, index) {
+        event.preventDefault();
+        var submenu = menuItems[index].submenu;
         var dropdown = document.getElementById('dropdown');
         dropdown.innerHTML = ''; // Clear existing menu items
-        // Render menu items
-        items.forEach(function(item) {
+        submenu.forEach(function(item) {
             var link = document.createElement('a');
             link.href = '#';
             link.textContent = item.label;
             link.onclick = function(event) {
                 event.preventDefault();
-                if (item.action === "exit") {
-                    toggleDropdown(); // Exit the dropdown menu
-                } else if (item.submenu) {
-                    backStack.push({ items: items, label: item.label }); // Push current items to the back stack
-                    renderMenuItems(item.submenu); // Render submenu items
-                    renderBackButton();
+                // If the submenu item has a submenu, recursively show it
+                if (item.submenu) {
+                    showSubMenu(event, submenu.indexOf(item));
                 }
             };
             dropdown.appendChild(link);
         });
     }
 
-    function renderBackButton() {
+    function goBack(event) {
+        event.preventDefault();
         var dropdown = document.getElementById('dropdown');
-        var backButton = document.createElement('a');
-        backButton.href = '#';
-        backButton.textContent = 'Back';
-        backButton.onclick = function(event) {
-            event.preventDefault();
-            var previousItems = backStack.pop();
-            if (previousItems) {
-                renderMenuItems(previousItems.items);
-                renderBackButton();
-            }
-        };
-        dropdown.insertBefore(backButton, dropdown.firstChild);
+        dropdown.classList.remove('show');
     }
 </script>
 

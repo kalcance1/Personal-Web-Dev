@@ -100,29 +100,12 @@
                 if (item.action === "exit") {
                     toggleDropdown(); // Exit the dropdown menu
                 } else if (item.submenu) {
-                    backStack.push({ items: items, label: item.label }); // Push current items to the back stack
+                    backStack.push(items); // Push current items to the back stack
                     renderMenuItems(item.submenu); // Render submenu items
-                    renderBackButton();
                 }
             };
             dropdown.appendChild(link);
         });
-    }
-
-    function renderBackButton() {
-        var dropdown = document.getElementById('dropdown');
-        var backButton = document.createElement('a');
-        backButton.href = '#';
-        backButton.textContent = 'Back';
-        backButton.onclick = function(event) {
-            event.preventDefault();
-            var previousItems = backStack.pop();
-            if (previousItems) {
-                renderMenuItems(previousItems.items);
-                renderBackButton();
-            }
-        };
-        dropdown.insertBefore(backButton, dropdown.firstChild);
     }
 </script>
 

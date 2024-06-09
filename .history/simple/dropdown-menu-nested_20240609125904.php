@@ -57,7 +57,6 @@
 
 <script>
     var menuItems = [
-        { label: "Exit", action: "exit" },
         { label: "Link 1", submenu: [
             { label: "Nested Link 1.1" },
             { label: "Nested Link 1.2", submenu: [
@@ -90,6 +89,15 @@
     function renderMenuItems(items) {
         var dropdown = document.getElementById('dropdown');
         dropdown.innerHTML = ''; // Clear existing menu items
+        // Add a back button if the back stack is not empty
+        if (backStack.length > 0) {
+            var backButton = document.createElement('button');
+            backButton.textContent = 'Back';
+            backButton.onclick = function() {
+                renderMenuItems(backStack.pop()); // Render the parent items
+            };
+            dropdown.appendChild(backButton);
+        }
         // Render menu items
         items.forEach(function(item) {
             var link = document.createElement('a');
@@ -97,32 +105,13 @@
             link.textContent = item.label;
             link.onclick = function(event) {
                 event.preventDefault();
-                if (item.action === "exit") {
-                    toggleDropdown(); // Exit the dropdown menu
-                } else if (item.submenu) {
-                    backStack.push({ items: items, label: item.label }); // Push current items to the back stack
+                if (item.submenu) {
+                    backStack.push(items); // Push current items to the back stack
                     renderMenuItems(item.submenu); // Render submenu items
-                    renderBackButton();
                 }
             };
             dropdown.appendChild(link);
         });
-    }
-
-    function renderBackButton() {
-        var dropdown = document.getElementById('dropdown');
-        var backButton = document.createElement('a');
-        backButton.href = '#';
-        backButton.textContent = 'Back';
-        backButton.onclick = function(event) {
-            event.preventDefault();
-            var previousItems = backStack.pop();
-            if (previousItems) {
-                renderMenuItems(previousItems.items);
-                renderBackButton();
-            }
-        };
-        dropdown.insertBefore(backButton, dropdown.firstChild);
     }
 </script>
 
