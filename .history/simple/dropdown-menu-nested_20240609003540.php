@@ -86,18 +86,10 @@
                 transform: translateX(-100%);
             }
         }
-        @keyframes slideInFromLeft {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(0);
-            }
-        }
         .enter-from-right {
             animation: slideInFromRight 0.3s forwards;
         }
-        .exit-to-left, .enter-from-left {
+        .exit-to-left {
             animation: slideOutToLeft 0.3s forwards;
         }
     </style>
@@ -193,50 +185,44 @@
         var currentContent = document.querySelector('.nested-content.show');
 
         if (currentContent) {
-            currentContent.classList.remove("show");
             currentContent.classList.add("exit-to-left");
             // Remove the animation class after the animation ends
             currentContent.addEventListener('animationend', function() {
+                currentContent.classList.remove("show");
                 currentContent.classList.remove("exit-to-left");
-            });
+            }, { once: true });
         }
 
         // Pop the last item from the stack
         var previousDropdown = navigationStack.pop();
 
-        // If there's a previous dropdown, show it
-        if (previousDropdown) {
-            var nestedContent = previousDropdown.querySelector('.nested-content.show');
-            if (nestedContent) {
-                nestedContent.classList.add("enter-from-left");
-                nestedContent.addEventListener('animationend', function() {
-                    nestedContent.classList.remove("enter-from-left");
-                });
-            }
-            previousDropdown.classList.add("show");
-        } else {
-            // If there's no previous dropdown, show the root dropdown
-            var rootDropdown = document.querySelector('.dropdown-content');
-            if (rootDropdown) {
-                rootDropdown.classList.add("show");
-            }
-        }
+// If there's a previous dropdown, show it
+if (previousDropdown) {
+    previousDropdown.classList.add("show");
+} else {
+    // If there's no previous dropdown, show the root dropdown
+    var rootDropdown = document.querySelector('.dropdown-content');
+    if (rootDropdown) {
+        rootDropdown.classList.add("show");
     }
+}
+}
 
-    function hideAll() {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        for (var i = 0; i < dropdowns.length; i++) {
-            dropdowns[i].classList.remove("show");
-        }
-        var nestedContents = document.getElementsByClassName("nested-content");
-        for (var i = 0; i < nestedContents.length; i++) {
-            nestedContents[i].classList.remove("show");
-            nestedContents[i].classList.remove("enter-from-right");
-            nestedContents[i].classList.remove("exit-to-left");
-        }
-        document.body.style.overflow = ''; // Restore body scroll
-    }
+function hideAll() {
+var dropdowns = document.getElementsByClassName("dropdown-content");
+for (var i = 0; i < dropdowns.length; i++) {
+    dropdowns[i].classList.remove("show");
+}
+var nestedContents = document.getElementsByClassName("nested-content");
+for (var i = 0; i < nestedContents.length; i++) {
+    nestedContents[i].classList.remove("show");
+    nestedContents[i].classList.remove("enter-from-right");
+    nestedContents[i].classList.remove("exit-to-left");
+}
+document.body.style.overflow = ''; // Restore body scroll
+}
 </script>
 
 </body>
 </html>
+

@@ -144,6 +144,9 @@
 </div>
 <!-- Nested Content End -->
 
+
+
+
 <script>
     var navigationStack = [];
     var zIndexCounter = 2; // Start zIndex for nested menus
@@ -206,13 +209,6 @@
 
         // If there's a previous dropdown, show it
         if (previousDropdown) {
-            var nestedContent = previousDropdown.querySelector('.nested-content.show');
-            if (nestedContent) {
-                nestedContent.classList.add("enter-from-left");
-                nestedContent.addEventListener('animationend', function() {
-                    nestedContent.classList.remove("enter-from-left");
-                });
-            }
             previousDropdown.classList.add("show");
         } else {
             // If there's no previous dropdown, show the root dropdown
@@ -238,5 +234,7 @@
     }
 </script>
 
+
 </body>
 </html>
+

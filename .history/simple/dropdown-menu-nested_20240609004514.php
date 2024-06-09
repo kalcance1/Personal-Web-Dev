@@ -212,6 +212,8 @@
                 nestedContent.addEventListener('animationend', function() {
                     nestedContent.classList.remove("enter-from-left");
                 });
+                // Hide the current dropdown sub-menu
+                nestedContent.classList.remove("show");
             }
             previousDropdown.classList.add("show");
         } else {
@@ -240,3 +242,4 @@
 
 </body>
 </html>
+

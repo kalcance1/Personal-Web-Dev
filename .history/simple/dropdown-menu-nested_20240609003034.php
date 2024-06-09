@@ -23,6 +23,7 @@
             width: 100%;
             height: 100%;
             background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
             overflow: auto;
             transform: translateX(100%);
@@ -86,18 +87,10 @@
                 transform: translateX(-100%);
             }
         }
-        @keyframes slideInFromLeft {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(0);
-            }
-        }
         .enter-from-right {
             animation: slideInFromRight 0.3s forwards;
         }
-        .exit-to-left, .enter-from-left {
+        .exit-to-left {
             animation: slideOutToLeft 0.3s forwards;
         }
     </style>
@@ -146,7 +139,6 @@
 
 <script>
     var navigationStack = [];
-    var zIndexCounter = 2; // Start zIndex for nested menus
 
     function toggleDropdown(id) {
         var dropdown = document.getElementById(id);
@@ -156,7 +148,6 @@
         } else {
             navigationStack = []; // Reset the stack when opening the root dropdown
             hideAll();
-            dropdown.style.zIndex = zIndexCounter; // Set zIndex for the root dropdown
             dropdown.classList.add("show");
             document.body.style.overflow = 'hidden'; // Prevent body scroll
         }
@@ -165,18 +156,13 @@
     function showNested(event, id) {
         event.preventDefault(); // Prevent default link behavior
 
-        // Hide all currently shown dropdowns except the root one
-        var dropdowns = document.querySelectorAll('.dropdown-content.show');
-        for (var i = 1; i < dropdowns.length; i++) {
-            dropdowns[i].classList.remove("show");
-        }
+        // Hide all currently shown dropdowns
+        hideAll();
 
         // Show the selected nested content with animation
         var nestedContent = document.getElementById(id);
         nestedContent.classList.add("show");
         nestedContent.classList.add("enter-from-right");
-        zIndexCounter++;
-        nestedContent.style.zIndex = zIndexCounter; // Increase zIndex for the nested menu
 
         // Determine if the selected content is within a dropdown
         var parentDropdown = nestedContent.closest('.dropdown-content, .nested-content');
@@ -193,12 +179,12 @@
         var currentContent = document.querySelector('.nested-content.show');
 
         if (currentContent) {
-            currentContent.classList.remove("show");
             currentContent.classList.add("exit-to-left");
             // Remove the animation class after the animation ends
             currentContent.addEventListener('animationend', function() {
+                currentContent.classList.remove("show");
                 currentContent.classList.remove("exit-to-left");
-            });
+            }, { once: true });
         }
 
         // Pop the last item from the stack
@@ -206,13 +192,6 @@
 
         // If there's a previous dropdown, show it
         if (previousDropdown) {
-            var nestedContent = previousDropdown.querySelector('.nested-content.show');
-            if (nestedContent) {
-                nestedContent.classList.add("enter-from-left");
-                nestedContent.addEventListener('animationend', function() {
-                    nestedContent.classList.remove("enter-from-left");
-                });
-            }
             previousDropdown.classList.add("show");
         } else {
             // If there's no previous dropdown, show the root dropdown

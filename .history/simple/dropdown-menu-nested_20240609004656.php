@@ -143,7 +143,6 @@
     <a href="#">Nested Link 2.3.2</a>
 </div>
 <!-- Nested Content End -->
-
 <script>
     var navigationStack = [];
     var zIndexCounter = 2; // Start zIndex for nested menus
@@ -204,16 +203,20 @@
         // Pop the last item from the stack
         var previousDropdown = navigationStack.pop();
 
-        // If there's a previous dropdown, show it
+        // If there's a previous dropdown, hide the current one and show it
         if (previousDropdown) {
-            var nestedContent = previousDropdown.querySelector('.nested-content.show');
-            if (nestedContent) {
-                nestedContent.classList.add("enter-from-left");
-                nestedContent.addEventListener('animationend', function() {
-                    nestedContent.classList.remove("enter-from-left");
+            var currentDropdown = previousDropdown.querySelector('.nested-content.show');
+            if (currentDropdown) {
+                currentDropdown.classList.remove("show");
+                currentDropdown.classList.add("exit-to-left");
+                // Remove the animation class after the animation ends
+                currentDropdown.addEventListener('animationend', function() {
+                    currentDropdown.classList.remove("exit-to-left");
+                    previousDropdown.classList.add("show");
                 });
+            } else {
+                previousDropdown.classList.add("show");
             }
-            previousDropdown.classList.add("show");
         } else {
             // If there's no previous dropdown, show the root dropdown
             var rootDropdown = document.querySelector('.dropdown-content');
@@ -240,3 +243,4 @@
 
 </body>
 </html>
+
