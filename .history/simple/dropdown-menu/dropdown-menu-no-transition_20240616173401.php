@@ -36,11 +36,6 @@
             display: block;
             text-align: center;
         }
-        .nested-content h2{
-            font-weight: bold;;
-            text-align: center; 
-            font-size: 16px;
-        }
         .nested-content button {
             color: black;
             padding: 12px 16px;
@@ -106,7 +101,7 @@
 <!-- Nested Content Start -->
 <div id="nested1" class="nested-content">
     <button class="back-btn" onclick="goBack(event)">Back</button>
-    <h2>(Link 1) Nested Level 1 Title 1</h2>
+    <h2>Nested Level 1 Title 1</h2>
     <a href="#">Nested Link 1.1</a>
     <a href="#">Nested Link 1.2</a>
     <a href="#" onclick="showNested(event, 'nested3')">Nested Link 1.3</a>
@@ -114,7 +109,7 @@
 
 <div id="nested2" class="nested-content">
     <button class="back-btn" onclick="goBack(event)">Back</button>
-    <h2>(Link 2) Nested Level 1 Title 2</h2>
+    <h2>Nested Level 1 Title 2</h2>
     <a href="#">Nested Link 2.1</a>
     <a href="#">Nested Link 2.2</a>
     <a href="#" onclick="showNested(event, 'nested4')">Nested Link 2.3</a>
@@ -122,7 +117,7 @@
 
 <div id="nested3" class="nested-content">
     <button class="back-btn" onclick="goBack(event)">Back</button>
-    <h2>(Link 1) Nested Level 2 Title 1</h2>
+    <h2>Nested Level 2 Title 1</h2>
 
     <a href="#">Nested Link 1.3.1</a>
     <a href="#">Nested Link 1.3.2</a>
@@ -130,7 +125,7 @@
 
 <div id="nested4" class="nested-content">
     <button class="back-btn" onclick="goBack(event)">Back</button>
-    <h2>(Link 2) Nested Level 2 Title 2</h2>
+    <h2>Nested Level 2 Title 2</h2>
 
     <a href="#">Nested Link 2.3.1</a>
     <a href="#">Nested Link 2.3.2</a>

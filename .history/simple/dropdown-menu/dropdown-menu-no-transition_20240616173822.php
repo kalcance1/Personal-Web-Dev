@@ -122,7 +122,7 @@
 
 <div id="nested3" class="nested-content">
     <button class="back-btn" onclick="goBack(event)">Back</button>
-    <h2>(Link 1) Nested Level 2 Title 1</h2>
+    <h2>(Link 1) Level 2 Title 1</h2>
 
     <a href="#">Nested Link 1.3.1</a>
     <a href="#">Nested Link 1.3.2</a>
