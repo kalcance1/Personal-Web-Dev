@@ -123,7 +123,7 @@
         <button class="exit-btn" onclick="hideAll()">Exit</button>
         <a href="#" onclick="showNested(event, 'nested1')">Link 1</a>
         <a href="#" onclick="showNested(event, 'nested2')">Link 2</a>
-        <a href="#" onclick="showNested(event, 'nested3')">Link 3</a>
+        <a href="#" onclick="showNested(event, 'nested3')">Link 3</a> <!-- Updated event handler -->
         
         <!-- Nested Content Start for dropdown1 -->
         <div id="nested1" class="nested-content">
@@ -132,15 +132,6 @@
             <a href="#">Nested Link 1.2</a>
         </div>
         <!-- Nested Content End for dropdown1 -->
-        
-        <!-- Nested Content Start for nested2 -->
-        <div id="nested2" class="nested-content">
-            <button class="back-btn" onclick="goBack(event)">Back</button>
-            <a href="#">Nested Link 2.1</a>
-            <a href="#">Nested Link 2.2</a>
-            <a href="#" onclick="showNested(event, 'nested4')">Nested Link2.3</a>
-        </div>
-        <!-- Nested Content End for nested2 -->
         
         <!-- Nested Content Start for nested3 -->
         <div id="nested3" class="nested-content">
@@ -196,13 +187,12 @@
         if (dropdown.classList.contains("show")) {
             console.log("Dropdown is currently shown. Hiding...");
             dropdown.classList.remove("show");
-           
             document.body.style.overflow = ''; // Restore body scroll
             // Clear the navigation stack when collapsing the dropdown
             navigationStack = [];
             console.log("Resetting navigation stack.");
         } else {
-            console.log("Dropdown is currently hidden. Showing...");
+            console.log("Dropdown iscurrently hidden. Showing...");
             hideAll();
             dropdown.classList.add("show");
             document.body.style.overflow = 'hidden'; // Prevent body scroll
@@ -210,95 +200,113 @@
     }
 
     function showNested(event, id) {
-    console.log("Showing nested content...");
-    event.preventDefault(); // Prevent default link behavior
+        console.log("Showing nested content...");
+        event.preventDefault(); // Prevent default link behavior
 
-    // Hide all currently shown nested contents
-    var nestedContents = document.querySelectorAll('.nested-content.show');
-    for (var i = 0; i < nestedContents.length; i++) {
-        console.log("Hiding nested content:", nestedContents[i].id);
-        nestedContents[i].classList.remove("show");
-    }
-
-    // Show the selected nested content with animation
-    var nestedContent = document.getElementById(id);
-    console.log("Showing selected nested content:", nestedContent.id);
-    nestedContent.classList.add("show", "enter-from-right");
-
-    // Update the navigation stack with the immediate parent dropdown
-    var parentDropdown = nestedContent.closest('.dropdown-content, .nested-content');
-    navigationStack = [parentDropdown];
-    console.log("Updated navigation stack:", navigationStack.map(elem => elem.id));
-}
-
-function goBack(event) {
-    console.log("Going back...");
-    event.preventDefault(); // Prevent default button behavior
-
-    // Get the currently shown nested content
-    var currentContent = document.querySelector('.nested-content.show');
-    console.log("Current content:", currentContent);
-    if (currentContent) {
-        console.log("Currently shown nested content:", currentContent.id);
-        currentContent.classList.remove("show");
-
-        // Hide the current nested content immediately
-        currentContent.style.display = "none";
-
-        // Update the navigation stack
-        updateNavigationStack();
-
-        // Show the correct nested content
-        showCorrectNestedContent();
-    }
-}
-
-function updateNavigationStack() {
-    // Get the parent dropdown of the current nested content
-    var parentDropdown = getCurrentParentDropdown();
-    console.log("Parent dropdown:", parentDropdown);
-    if (parentDropdown) {
-        // Remove entries from the stack until the parent dropdown is reached
-        while (navigationStack.length > 0 && navigationStack[navigationStack.length - 1] !== parentDropdown) {
-            navigationStack.pop();
-            console.log("Removed entry from the navigation stack.");
+        // Hide all currently shown nested contents
+        var nestedContents = document.querySelectorAll('.nested-content.show');
+        for (var i = 0; i < nestedContents.length; i++) {
+            console.log("Hiding nested content:", nestedContents[i].id);
+            nestedContents[i].classList.remove("show");
         }
-    } else {
-        console.log("Could not find parent dropdown. Current content hierarchy:", currentContent.closest('.dropdown'));
-    }
-}
 
-function showCorrectNestedContent() {
-    // Pop the last item from the stack
-    var previousDropdown = navigationStack.pop();
+        // Show the selected nested content with animation
+        var nestedContent = document.getElementById(id);
+        console.log("Showing selected nested content:", nestedContent.id);
+        nestedContent.classList.add("show", "enter-from-right");
 
-    // If there's a previous dropdown, show it
-    if (previousDropdown) {
-        console.log("Previous dropdown found:", previousDropdown.id);
-        previousDropdown.classList.add("show");
-        // Make the previous nested content visible
-        var previousNestedContent = previousDropdown.querySelector('.nested-content');
-        if (previousNestedContent) {
-            previousNestedContent.style.display = "block";
-        }
-    } else {
-        // If there's no previous dropdown, show the root dropdown
-        var rootDropdown = document.querySelector('.dropdown-content');
-        if (rootDropdown) {
-            console.log("No previous dropdown found. Showing root dropdown:", rootDropdown.id);
-            rootDropdown.classList.add("show");
+        // Determine if the selected content is within a dropdown
+        var parentDropdown = nestedContent.closest('.dropdown-content, .nested-content');
+        if (parentDropdown) {
+            console.log("Parent dropdown found:", parentDropdown.id);
+            // Clear the stack if the parent dropdown is the root dropdown
+            if (parentDropdown.classList.contains("dropdown-content")) {
+                navigationStack = [];
+                console.log("Resetting navigation stack.");
+            }
+            // Push the parent dropdown onto the stack
+            navigationStack.push(parentDropdown);
+            console.log("Updated navigation stack:", navigationStack.map(elem => elem.id));
         }
     }
-}
 
-function getCurrentParentDropdown() {
-    var currentContent = document.querySelector('.nested-content.show');
-    if (currentContent) {
-        return currentContent.closest('.dropdown-content');
+    function goBack(event) {
+        console.log("Going back...");
+        event.preventDefault(); // Prevent default button behavior
+
+        // Get the currently shown nested content
+        var currentContent = document.querySelector('.nested-content.show');
+        console.log("Current content:", currentContent);
+        if (currentContent) {
+            console.log("Currently shown nested content:", currentContent.id);
+            currentContent.classList.add("exit-to-right");
+
+            // Set flag to track animation completion
+            var animationCompleted = false;
+
+            // Check if the animation has ended for the current content
+            setTimeout(function () {
+                console.log("Removing animation classes for:", currentContent.id);
+                currentContent.classList.remove("show", "exit-to-right");
+
+                // Check if animation has ended for all elements
+                if (animationCompleted) {
+                    proceedAfterAnimation();
+                }
+            }, 300); // Adjust the delay as needed
+
+            // Set flag when animation ends
+            setTimeout(function () {
+                animationCompleted = true;
+
+                // Check if animation has ended for all elements
+                if (currentContent.classList.contains("exit-to-right")) {
+                    proceedAfterAnimation();
+                }
+            }, 600); // Adjust the delay as needed
+
+            // Find the parent dropdown of the current nested content
+            var parentDropdown = currentContent.closest('.dropdown-content');
+            console.log("Parent dropdown:", parentDropdown);
+            if (parentDropdown) {
+                // Remove entries from the stack until the parent dropdown is reached
+                while (navigationStack.length > 0 && navigationStack[navigationStack.length - 1] !== parentDropdown) {
+                    navigationStack.pop();
+                    console.log("Removed entry from the navigation stack.");
+                }
+            } else {
+                console.log("Could not find parent dropdown. Current content hierarchy:", currentContent.closest('.dropdown'));
+            }
+        }
     }
-    return null;
-}
 
+    function proceedAfterAnimation() {
+        // Pop the last item from the stack
+        var previousDropdown = navigationStack.pop();
+
+        // If there's a previous dropdown, show it
+        if (previousDropdown) {
+            console.log("Previous dropdown found:", previousDropdown.id);
+
+            // Delay showing the previous dropdown until the exit animation completes
+            setTimeout(function() {
+                previousDropdown.classList.add("enter-from-left", "show");
+
+                // Remove the enter-from-left class after the animation ends
+                setTimeout(function() {
+                    console.log("Removing animation class for:", previousDropdown.id);
+                    previousDropdown.classList.remove("enter-from-left");
+                }, 300); // Adjust the delay as needed
+            }, 300); // Adjust the delay as needed
+        } else {
+            // If there's no previous dropdown, show the root dropdown
+            var rootDropdown = document.querySelector('.dropdown-content');
+            if (rootDropdown) {
+                console.log("No previous dropdown found. Showing root dropdown:", rootDropdown.id);
+                rootDropdown.classList.add("show");
+            }
+        }
+    }
 
     function hideAll() {
         console.log("Hiding all dropdowns and nested contents...");
@@ -316,3 +324,4 @@ function getCurrentParentDropdown() {
 
 </body>
 </html>
+
