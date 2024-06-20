@@ -84,7 +84,6 @@
             text-align: left;
             background: black;
             color: white;
-            padding: 12px 16px;
         }
         .nested-content {
             z-index: 2; /* Ensure nested menus stack above the previous ones */

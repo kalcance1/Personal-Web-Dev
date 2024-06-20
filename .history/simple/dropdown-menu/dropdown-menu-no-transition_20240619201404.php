@@ -82,9 +82,8 @@
         }
         .exit-btn {
             text-align: left;
-            background: black;
+            background: #333;
             color: white;
-            padding: 12px 16px;
         }
         .nested-content {
             z-index: 2; /* Ensure nested menus stack above the previous ones */
