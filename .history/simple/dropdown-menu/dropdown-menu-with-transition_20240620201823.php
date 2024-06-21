@@ -156,25 +156,23 @@
 
 <script>
     var navigationStack = [];
-    var isDropdownOpen = false;
 
     function toggleDropdown(id) {
         var dropdown = document.getElementById(id);
-        if (!isDropdownOpen) {
-            hideAll(); // Hide all other dropdowns and nested content
-            dropdown.classList.add("show");
-            setTimeout(() => {
-                dropdown.classList.add("visible");
-            }, 10); // Short delay to trigger transition
-            document.body.style.overflow = 'hidden'; // Prevent body scroll
-            isDropdownOpen = true;
-        } else {
+        if (dropdown.classList.contains("show")) {
             dropdown.classList.remove("visible");
             setTimeout(() => {
                 dropdown.classList.remove("show");
                 document.body.style.overflow = ''; // Restore body scroll
             }, 300); // Match the transition duration
-            isDropdownOpen = false;
+            navigationStack = []; // Reset navigation stack
+        } else {
+            hideAll();
+            dropdown.classList.add("show");
+            setTimeout(() => {
+                dropdown.classList.add("visible");
+            }, 10); // Short delay to trigger transition
+            document.body.style.overflow = 'hidden'; // Prevent body scroll
         }
     }
 
@@ -249,7 +247,6 @@
         }
         document.body.style.overflow = ''; // Restore body scroll
         navigationStack = []; // Reset navigation stack
-        isDropdownOpen = false; // Reset dropdown state
     }
 </script>
 
