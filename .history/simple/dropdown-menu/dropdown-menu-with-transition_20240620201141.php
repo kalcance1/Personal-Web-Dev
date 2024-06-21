@@ -168,11 +168,13 @@
             navigationStack = []; // Reset navigation stack
         } else {
             hideAll();
-            dropdown.classList.add("show");
             setTimeout(() => {
-                dropdown.classList.add("visible");
-            }, 10); // Short delay to trigger transition
-            document.body.style.overflow = 'hidden'; // Prevent body scroll
+                dropdown.classList.add("show");
+                setTimeout(() => {
+                    dropdown.classList.add("visible");
+                }, 10); // Short delay to trigger transition
+                document.body.style.overflow = 'hidden'; // Prevent body scroll
+            }, 0); // Trigger hideAll before showing dropdown
         }
     }
 
@@ -190,10 +192,12 @@
 
         // Show the selected nested content
         var nestedContent = document.getElementById(id);
-        nestedContent.classList.add("show");
-        setTimeout(() => {
-            nestedContent.classList.add("visible");
-        }, 10); // Short delay to trigger transition
+        setTimeout(() => { // Ensure previous transitions are complete
+            nestedContent.classList.add("show");
+            setTimeout(() => {
+                nestedContent.classList.add("visible");
+            }, 10); // Short delay to trigger transition
+        }, 0); // Match the transition duration
 
         // Add the current content to the navigation stack
         navigationStack.push(nestedContent);
@@ -214,18 +218,22 @@
         // Show the previous content in the navigation stack
         if (navigationStack.length > 0) {
             var previousContent = navigationStack[navigationStack.length - 1];
-            previousContent.classList.add("show");
-            setTimeout(() => {
-                previousContent.classList.add("visible");
-            }, 10); // Short delay to trigger transition
+            setTimeout(() => { // Ensure previous transitions are complete
+                previousContent.classList.add("show");
+                setTimeout(() => {
+                    previousContent.classList.add("visible");
+                }, 10); // Short delay to trigger transition
+            }, 0); // Match the transition duration
         } else {
             // If the stack is empty, show the root dropdown
             var rootDropdown = document.querySelector('.dropdown-content');
             if (rootDropdown) {
-                rootDropdown.classList.add("show");
-                setTimeout(() => {
-                    rootDropdown.classList.add("visible");
-                }, 10); // Short delay to trigger transition
+                setTimeout(() => { // Ensure previous transitions are complete
+                    rootDropdown.classList.add("show");
+                    setTimeout(() => {
+                        rootDropdown.classList.add("visible");
+                    }, 10); // Short delay to trigger transition
+                }, 0); // Match the transition duration
             }
         }
     }

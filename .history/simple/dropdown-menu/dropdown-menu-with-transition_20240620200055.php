@@ -31,6 +31,7 @@
         }
         .show {
             display: block;
+
         }
         .visible {
             opacity: 1;
@@ -45,7 +46,7 @@
         }
         .nested-content h2 {
             font-weight: bold;
-            text-align: center;
+            text-align: center; 
             font-size: 16px;
         }
         .nested-content button {
@@ -151,6 +152,7 @@
         <a href="#">Nested Link 3.3.3</a>
     </div>
 
+
     <!-- Additional Nested Content Can Be Added Dynamically -->
 </div>
 
@@ -160,11 +162,11 @@
     function toggleDropdown(id) {
         var dropdown = document.getElementById(id);
         if (dropdown.classList.contains("show")) {
-            dropdown.classList.remove("visible");
+            dropdown.classList.remove("show");
             setTimeout(() => {
-                dropdown.classList.remove("show");
-                document.body.style.overflow = ''; // Restore body scroll
+                dropdown.classList.remove("visible");
             }, 300); // Match the transition duration
+            document.body.style.overflow = ''; // Restore body scroll
             navigationStack = []; // Reset navigation stack
         } else {
             hideAll();
@@ -181,39 +183,59 @@
 
         // Hide all currently shown nested contents
         var nestedContents = document.querySelectorAll('.nested-content.show');
+        console.log("current nested element count: " + nestedContents.length);
         for (var i = 0; i < nestedContents.length; i++) {
-            nestedContents[i].classList.remove("visible");
+            nestedContents[i].classList.remove("show");
             setTimeout(() => {
-                nestedContents[i].classList.remove("show");
+                nestedContents[i].classList.remove("visible");
             }, 300); // Match the transition duration
         }
 
         // Show the selected nested content
         var nestedContent = document.getElementById(id);
         nestedContent.classList.add("show");
+        console.log(nestedContent.classList);
         setTimeout(() => {
             nestedContent.classList.add("visible");
         }, 10); // Short delay to trigger transition
 
-        // Add the current content to the navigation stack
-        navigationStack.push(nestedContent);
+        // Determine if the selected content is within a dropdown or nested content
+        var parent = nestedContent.closest('.dropdown-content.show, .nested-content.show');
+        if (parent) {
+            console.log("pushing parent");
+            console.log(parent);
+            navigationStack.push(parent);
+        }
     }
 
     function goBack(event) {
         event.preventDefault(); // Prevent default button behavior
 
         // Hide the current nested content
-        var currentContent = navigationStack.pop();
+        var currentContent = document.querySelector('.nested-content.show');
         if (currentContent) {
-            currentContent.classList.remove("visible");
+            currentContent.classList.remove("show");
             setTimeout(() => {
-                currentContent.classList.remove("show");
+                currentContent.classList.remove("visible");
             }, 300); // Match the transition duration
+        }
+
+        // Pop the stack to remove the current content's parent
+        if (navigationStack.length > 0) {
+            console.log(navigationStack.length);
+            console.log(navigationStack.length-1);
+
+            console.log(navigationStack[navigationStack.length-1]);
+
+            navigationStack.pop();
         }
 
         // Show the previous content in the navigation stack
         if (navigationStack.length > 0) {
             var previousContent = navigationStack[navigationStack.length - 1];
+            console.log(navigationStack.length);
+
+            console.log(navigationStack[navigationStack.length - 1]);
             previousContent.classList.add("show");
             setTimeout(() => {
                 previousContent.classList.add("visible");
@@ -233,16 +255,16 @@
     function hideAll() {
         var dropdowns = document.getElementsByClassName("dropdown-content");
         for (var i = 0; i < dropdowns.length; i++) {
-            dropdowns[i].classList.remove("visible");
+            dropdowns[i].classList.remove("show");
             setTimeout(() => {
-                dropdowns[i].classList.remove("show");
+                dropdowns[i].classList.remove("visible");
             }, 300); // Match the transition duration
         }
         var nestedContents = document.getElementsByClassName("nested-content");
         for (var i = 0; i < nestedContents.length; i++) {
-            nestedContents[i].classList.remove("visible");
+            nestedContents[i].classList.remove("show");
             setTimeout(() => {
-                nestedContents[i].classList.remove("show");
+                nestedContents[i].classList.remove("visible");
             }, 300); // Match the transition duration
         }
         document.body.style.overflow = ''; // Restore body scroll

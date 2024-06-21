@@ -195,20 +195,28 @@
             nestedContent.classList.add("visible");
         }, 10); // Short delay to trigger transition
 
-        // Add the current content to the navigation stack
-        navigationStack.push(nestedContent);
+        // Determine if the selected content is within a dropdown or nested content
+        var parent = nestedContent.closest('.dropdown-content.show, .nested-content.show');
+        if (parent) {
+            navigationStack.push(parent);
+        }
     }
 
     function goBack(event) {
         event.preventDefault(); // Prevent default button behavior
 
         // Hide the current nested content
-        var currentContent = navigationStack.pop();
+        var currentContent = document.querySelector('.nested-content.show');
         if (currentContent) {
             currentContent.classList.remove("visible");
             setTimeout(() => {
                 currentContent.classList.remove("show");
             }, 300); // Match the transition duration
+        }
+
+        // Pop the stack to remove the current content's parent
+        if (navigationStack.length > 0) {
+            navigationStack.pop();
         }
 
         // Show the previous content in the navigation stack
